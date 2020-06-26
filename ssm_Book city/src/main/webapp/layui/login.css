@@ -1,0 +1,23 @@
+*{
+    margin:0;
+    padding: 0;
+}
+
+.form-box{
+    border: 1px solid #c7bdbd;
+    width: 300px;
+    margin:220px auto;
+    box-shadow: 10px 10px 10px #9E9EA6;
+    padding:10px;
+}
+.item{
+    text-align: center;
+    padding-top: 10px;
+}
+.form-box .item .userinfo{
+    height: 30px;
+    text-indent: 10px;
+}
+.form-box .item .btn{
+    margin-left: 10px;
+}

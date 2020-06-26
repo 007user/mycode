@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xcn.dao.BookDao">
+
+    <resultMap id="my" type="com.xcn.entity.Book">
+        <id property="book_id" column="book_id"></id>
+        <result property="book_name" column="book_name"></result>
+        <result property="book_time" column="book_time"></result>
+        <result property="book_pice" column="book_pice"></result>
+        <association property="author" javaType="com.xcn.entity.Author">
+            <id property="author_id" column="author_id"></id>
+            <result property="author_name" column="author_name"></result>
+        </association>
+        <association property="book_type" javaType="com.xcn.entity.Types">
+            <id property="type_id" column="type_id"></id>
+            <result property="typer_name" column="type_name"></result>
+        </association>
+    </resultMap>
+
+    <resultMap id="yy" type="com.xcn.entity.Types">
+        <id property="type_id" column="type_id"></id>
+        <result property="typer_name" column="type_name"></result>
+    </resultMap>
+
+    <resultMap id="aa" type="com.xcn.entity.Author">
+        <id property="author_id" column="author_id"></id>
+        <result property="author_name" column="author_name"></result>
+    </resultMap>
+
+    <select id="queryBook_All" resultMap="my">
+
+        SELECT t_book.book_id,t_book.book_name,t_author.author_name,t_book.book_time,t_book.book_pice,t_type.type_name
+        FROM t_book,t_author,t_type
+        WHERE t_book.book_author = t_author.author_id AND t_book.book_type = t_type.type_id
+
+        <if test="bookname != null">
+            AND t_book.book_name like CONCAT('%',#{bookname},'%')
+        </if>
+
+        <if test="bookauthor != null">
+            AND t_author.author_name like CONCAT('%',#{bookauthor},'%')
+        </if>
+
+        <if test="booktype != null">
+            AND t_type.type_name like CONCAT('%',#{booktype},'%')
+        </if>
+
+        <if test="btm != null and atm != null ">
+            AND  t_book.book_time between  #{btm} AND #{atm}
+        </if>
+
+        order by t_book.book_id
+        limit #{rows},#{cols}
+    </select>
+
+    <select id="queryBook_All_count" resultType="int">
+        SELECT COUNT(t_book.book_id)
+        FROM t_book,t_author,t_type
+        WHERE t_book.book_author = t_author.author_id
+        AND t_book.book_type = t_type.type_id
+
+        <if test="bookname != null">
+            AND t_book.book_name like CONCAT('%',#{bookname},'%')
+        </if>
+
+        <if test="bookauthor != null">
+            AND t_author.author_name like CONCAT('%',#{bookauthor},'%')
+        </if>
+
+        <if test="booktype != null">
+            AND t_type.type_name like CONCAT('%',#{booktype},'%')
+        </if>
+
+        <if test="btm != null and atm != null  " >
+            AND  t_book.book_time between  #{btm} AND #{atm}
+        </if>
+    </select>
+
+
+    <delete id="delBook" parameterType="int[]">
+        delete from t_book WHERE t_book.book_id in
+         <foreach collection="array" open="(" separator="," close=")" item="ids">
+             #{ids}
+         </foreach>
+    </delete>
+
+
+    <update id="updataBook">
+        UPDATE t_book SET t_book.book_time = #{time},t_book.book_pice = #{pices}
+        WHERE t_book.book_id = #{id}
+    </update>
+
+
+    <select id="selects" resultMap="yy">
+        select * from t_type
+    </select>
+
+    <select id="selectss" resultMap="aa">
+        select * from t_Author
+    </select>
+
+
+    <insert id="add_Book" parameterType="com.xcn.entity.Book">
+        INSERT INTO t_book (book_name,book_author,book_time,book_pice,book_type) VALUES(#{bookname},#{bookauthor_id},#{booktime},#{bookpice},#{booktype_id})
+    </insert>
+
+
+</mapper>

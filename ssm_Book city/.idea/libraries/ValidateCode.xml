@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ValidateCode" type="kotlin.js">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../jar包/ValidateCode.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
